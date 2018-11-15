@@ -1,9 +1,7 @@
 ---
-- hosts: elk_nodes
+- hosts: elk_nodes, kibana_node
   gather_facts: False
   become: yes
 
   tasks:
-    - name: 'link python to enable ansible' 
-      raw: 'sudo ln -fs /usr/bin/python3 /usr/bin/python'
     - ping: 

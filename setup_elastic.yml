@@ -1,14 +1,6 @@
 ---
-- hosts: elk_nodes
+- hosts: <group>
   become: yes
-
-  vars:
-    - elasticsearch_cluster_name: elk_formation
-    - elasticsearch_network_host: "0.0.0.0"
-    - elasticsearch_http_port: 9200
-    - elk_node_ips:
-      - 10.0.2.4
-      - 10.0.2.5
 
   tasks:
     - name: upgrade system
@@ -19,44 +11,7 @@
         name: 
           - apt-transport-https
           - uuid-runtime
-          # - pwgen
           - openjdk-11-jre-headless
           - gpg
         state: present
         update_cache: yes
-
-    - name: Add elasticsearch repo GPG key
-      apt_key:
-        url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
-        state: present
-
-    - name: Add elasticsearch apt repo
-      apt_repository:
-        repo: "deb https://artifacts.elastic.co/packages/6.x/apt stable main"
-        state: present
-
-    - name: Install Elasticsearch # requires java preinstalled
-      apt: pkg=elasticsearch state=present
-
-    - name: Configure Elasticsearch.
-      template:
-        src: elasticsearch.yml.j2
-        dest: /etc/elasticsearch/elasticsearch.yml
-        owner: root
-        group: elasticsearch
-        mode: 0740 # Elasticsearch service run with user elasticsearch in group elasticsearch
-      notify: restart elasticsearch
-
-    - name: Start Elasticsearch.
-      systemd:
-        name: elasticsearch
-        state: restarted
-        enabled: yes
-        daemon_reload: yes #required before first run
-
-    - name: Make sure Elasticsearch is running before proceeding.
-      wait_for: host={{ elasticsearch_network_host }} port={{ elasticsearch_http_port }} delay=3 timeout=300
-
-  handlers:
-    - name: restart elasticsearch
-      service: name=elasticsearch state=restarted
