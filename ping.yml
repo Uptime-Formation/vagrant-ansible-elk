@@ -1,0 +1,8 @@
+---
+hosts:
+  - elk_nodes
+  - kibana_node
+
+
+tasks:
+  - ping:
