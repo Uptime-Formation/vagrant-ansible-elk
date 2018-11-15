@@ -41,9 +41,6 @@
     - name: Install Elasticsearch # requires java preinstalled
       apt: pkg=elasticsearch state=present
 
-  #   - name: Install Kibana
-  #     apt: pkg=kibana state=present
-
     - name: Configure Elasticsearch.
       template:
         src: elasticsearch.yml.j2
@@ -53,22 +50,6 @@
         mode: 0740 # Elasticsearch service run with user elasticsearch in group elasticsearch
       notify: restart elasticsearch
 
-  #   - name: Configure Kibana.
-  #     template:
-  #       src: kibana.yml.j2
-  #       dest: /etc/kibana/kibana.yml
-  #       owner: root
-  #       group: kibana
-  #       mode: 0740 # Kibana service run with user kibana in group kibana
-  #     notify: restart kibana
-
-  #   - name: Create kibana log file
-  #     file:
-  #       state: touch
-  #       path: /var/log/kibana.log
-  #       owner: kibana
-  #       mode: 740
-
     - name: Start Elasticsearch.
       systemd:
         name: elasticsearch
@@ -76,19 +57,9 @@
         enabled: yes
         daemon_reload: yes #required before first run
 
-  #   - name: Start Kibana.
-  #     systemd:
-  #       name: kibana
-  #       state: restarted
-  #       enabled: yes
-  #       daemon_reload: yes #required before first run
-
     - name: Make sure Elasticsearch is running before proceeding.
       wait_for: host={{ elasticsearch_network_host }} port={{ elasticsearch_http_port }} delay=3 timeout=300
 
   handlers:
     - name: restart elasticsearch
       service: name=elasticsearch state=restarted
-
-  #   - name: restart kibana
-  #     service: name=kibana state=restarted
