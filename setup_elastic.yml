@@ -4,7 +4,7 @@
 
   vars:
     - elasticsearch_cluster_name: elk_formation
-    - elasticsearch_network_host: 127.0.0.1
+    - elasticsearch_network_host: "0.0.0.0"
     - elasticsearch_http_port: 9200
 
     - kibana_server_port: 5601
@@ -19,37 +19,37 @@
         name: 
           - apt-transport-https
           - uuid-runtime
-          - pwgen
-          - openjdk-8-jre-headless
+          # - pwgen
+          - openjdk-11-jre-headless
           - gpg
         state: present
         update_cache: yes
         upgrade: yes
 
-    # - name: Add elasticsearch repo GPG key
-    #   apt_key:
-    #     url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
-    #     state: present
+    - name: Add elasticsearch repo GPG key
+      apt_key:
+        url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+        state: present
 
-    # - name: Add elasticsearch apt repo
-    #   apt_repository:
-    #     repo: "deb https://artifacts.elastic.co/packages/6.x/apt stable main"
-    #     state: present
+    - name: Add elasticsearch apt repo
+      apt_repository:
+        repo: "deb https://artifacts.elastic.co/packages/6.x/apt stable main"
+        state: present
 
-    # - name: Install Elasticsearch # requires java preinstalled
-    #   apt: pkg=elasticsearch state=present
+    - name: Install Elasticsearch # requires java preinstalled
+      apt: pkg=elasticsearch state=present
 
   #   - name: Install Kibana
   #     apt: pkg=kibana state=present
 
-  #   - name: Configure Elasticsearch.
-  #     template:
-  #       src: elasticsearch.yml.j2
-  #       dest: /etc/elasticsearch/elasticsearch.yml
-  #       owner: root
-  #       group: elasticsearch
-  #       mode: 0740 # Elasticsearch service run with user elasticsearch in group elasticsearch
-  #     notify: restart elasticsearch
+    - name: Configure Elasticsearch.
+      template:
+        src: elasticsearch.yml.j2
+        dest: /etc/elasticsearch/elasticsearch.yml
+        owner: root
+        group: elasticsearch
+        mode: 0740 # Elasticsearch service run with user elasticsearch in group elasticsearch
+      notify: restart elasticsearch
 
   #   - name: Configure Kibana.
   #     template:
