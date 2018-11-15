@@ -1,8 +1,9 @@
 ---
-hosts:
-  - elk_nodes
-  - kibana_node
+- hosts: elk_nodes
+  gather_facts: False
+  become: yes
 
-
-tasks:
-  - ping:
+  tasks:
+  #   - name: install 
+    # raw: 'sudo ln -fs /usr/bin/python3 /usr/bin/python'
+    - ping: 
