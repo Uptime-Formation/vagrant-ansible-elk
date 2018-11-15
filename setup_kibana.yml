@@ -3,13 +3,9 @@
   become: yes
 
   vars:
-    - elasticsearch_cluster_name: elk_formation
-    - elasticsearch_network_host: 127.0.0.1
-    - elasticsearch_http_port: 9200
-
     - kibana_server_port: 5601
     - kibana_server_host: "0.0.0.0"
-    - kibana_elasticsearch_url: "http://localhost:9200"
+    - kibana_elasticsearch_url: "http://<elastic_node_ip>:9200"
     - kibana_elasticsearch_username: ""
     - kibana_elasticsearch_password: ""
 
@@ -19,8 +15,7 @@
         name: 
           - apt-transport-https
           - uuid-runtime
-          - pwgen
-          - openjdk-8-jre-headless
+          - openjdk-11-jre-headless
           - gpg
         state: present
         update_cache: yes
