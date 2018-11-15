@@ -6,12 +6,9 @@
     - elasticsearch_cluster_name: elk_formation
     - elasticsearch_network_host: "0.0.0.0"
     - elasticsearch_http_port: 9200
-
-    # - kibana_server_port: 5601
-    # - kibana_server_host: "0.0.0.0"
-    # - kibana_elasticsearch_url: "http://localhost:9200"
-    # - kibana_elasticsearch_username: ""
-    # - kibana_elasticsearch_password: ""
+    - elk_node_ips:
+      - 10.0.2.4
+      - 10.0.2.5
 
   tasks:
     - name: upgrade system
