@@ -7,13 +7,16 @@
     - elasticsearch_network_host: "0.0.0.0"
     - elasticsearch_http_port: 9200
 
-    - kibana_server_port: 5601
-    - kibana_server_host: "0.0.0.0"
-    - kibana_elasticsearch_url: "http://localhost:9200"
-    - kibana_elasticsearch_username: ""
-    - kibana_elasticsearch_password: ""
+    # - kibana_server_port: 5601
+    # - kibana_server_host: "0.0.0.0"
+    # - kibana_elasticsearch_url: "http://localhost:9200"
+    # - kibana_elasticsearch_username: ""
+    # - kibana_elasticsearch_password: ""
 
   tasks:
+    - name: upgrade system
+      command: apt upgrade -y
+    
     - name: Install apt requirements
       apt:
         name: 
@@ -24,7 +27,6 @@
           - gpg
         state: present
         update_cache: yes
-        upgrade: yes
 
     - name: Add elasticsearch repo GPG key
       apt_key:
@@ -67,12 +69,12 @@
   #       owner: kibana
   #       mode: 740
 
-  #   - name: Start Elasticsearch.
-  #     systemd:
-  #       name: elasticsearch
-  #       state: restarted
-  #       enabled: yes
-  #       daemon_reload: yes #required before first run
+    - name: Start Elasticsearch.
+      systemd:
+        name: elasticsearch
+        state: restarted
+        enabled: yes
+        daemon_reload: yes #required before first run
 
   #   - name: Start Kibana.
   #     systemd:
@@ -81,12 +83,12 @@
   #       enabled: yes
   #       daemon_reload: yes #required before first run
 
-  #   - name: Make sure Elasticsearch is running before proceeding.
-  #     wait_for: host={{ elasticsearch_network_host }} port={{ elasticsearch_http_port }} delay=3 timeout=300
+    - name: Make sure Elasticsearch is running before proceeding.
+      wait_for: host={{ elasticsearch_network_host }} port={{ elasticsearch_http_port }} delay=3 timeout=300
 
-  # handlers:
-  #   - name: restart elasticsearch
-  #     service: name=elasticsearch state=restarted
+  handlers:
+    - name: restart elasticsearch
+      service: name=elasticsearch state=restarted
 
   #   - name: restart kibana
   #     service: name=kibana state=restarted
