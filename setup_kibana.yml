@@ -31,7 +31,9 @@
         state: present
 
     - name: Install Kibana
-      apt: pkg=kibana state=present
+      apt: 
+        name: kibana
+        state: present
 
     - name: Configure Kibana.
       template:
