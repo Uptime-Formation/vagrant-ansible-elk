@@ -1,5 +1,5 @@
 ---
-- hosts: elk_nodes, kibana_node
+- hosts: elastic_nodes, kibana_nodes
   gather_facts: False
   become: yes
 
