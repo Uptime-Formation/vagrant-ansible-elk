@@ -3,12 +3,6 @@
   become: yes #tasks will run as root by default
 
   tasks:
-    - name: update apt cache
-      command: apt update
-    
-    - name: upgrade system
-      command: apt upgrade -y
-    
     - name: Install apt requirements
       apt:
         name: 
