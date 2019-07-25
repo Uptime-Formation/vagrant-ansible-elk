@@ -3,6 +3,9 @@
   become: yes #tasks will run as root by default
 
   tasks:
+    - name: update apt cache
+      command: apt update
+    
     - name: upgrade system
       command: apt upgrade -y
     
@@ -13,5 +16,4 @@
           - uuid-runtime
           - openjdk-11-jre-headless
           - gpg
-        state: present
         update_cache: yes
