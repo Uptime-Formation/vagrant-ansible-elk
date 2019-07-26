@@ -1,5 +1,5 @@
 ---
-- hosts: <groupe_a_pinguer> 
+- hosts: elastic_nodes
   gather_facts: False
   become: yes
 
