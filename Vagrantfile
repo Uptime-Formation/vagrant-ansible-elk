@@ -5,7 +5,7 @@ Vagrant.configure("2") do |config|
     config.vm.box = "ubuntu/bionic64"
     config.ssh.insert_key = false # Avoid  vagrant to remove the common ssh private key
     config.vm.provider :virtualbox do |v|
-      v.memory = 1300
+      v.memory = 1536
     end
 
     # elastic_node1
