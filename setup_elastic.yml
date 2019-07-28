@@ -1,6 +1,13 @@
----
-- hosts: <group_elastic_nodes>
+- hosts: elastic_nodes
   become: yes #tasks will run as root by default
+
+  vars:
+    - elasticsearch_cluster_name: elk_formation
+    - elasticsearch_network_host: "0.0.0.0"
+    - elasticsearch_http_port: 9200
+    - elk_node_ips:
+      - 192.168.2.2
+      - 192.168.2.3
 
   tasks:
     - name: Install apt requirements
@@ -11,3 +18,57 @@
           - openjdk-11-jre-headless
           - gpg
         update_cache: yes
+      
+    - name: Add elasticsearch repo GPG key
+      apt_key:
+        url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+        state: present
+
+    - name: Add elasticsearch apt repo
+      apt_repository:
+        repo: "deb https://artifacts.elastic.co/packages/6.x/apt stable main"
+        state: present
+
+    - name: Install Elasticsearch # requires java preinstalled
+      apt:
+        name: elasticsearch
+        state: present
+
+    - name: Configure Elasticsearch.
+      template:
+        src: elasticsearch.yml.j2
+        dest: /etc/elasticsearch/elasticsearch.yml
+        owner: root
+        group: elasticsearch
+        mode: 0740
+      notify: restart elasticsearch
+      
+    - name: Setup Heap Memory size in /etc/elasticsearch/jvm.options
+      lineinfile:
+        path: /etc/elasticsearch/jvm.options
+        regexp: "^-Xm{{ item }}.*"
+        line: "-Xm{{ item }}1100m"    
+      loop:
+        - 's'
+        - 'x'
+      notify: restart elasticsearch
+
+    - name: Start Elasticsearch.
+      systemd:
+        name: elasticsearch
+        state: started
+        enabled: yes
+        daemon_reload: yes #required before first run
+
+    - name: Make sure Elasticsearch is running before proceeding.
+      wait_for:
+        host: "{{ elasticsearch_network_host }}"
+        port: "{{ elasticsearch_http_port }}"
+        delay: 3
+        timeout: 60
+
+  handlers:
+    - name: restart elasticsearch
+      service:
+        name: elasticsearch
+        state: restarted

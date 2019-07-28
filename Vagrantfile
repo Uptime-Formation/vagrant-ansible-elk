@@ -2,9 +2,11 @@
 # vi: set ft=ruby :
 Vagrant.configure("2") do |config|
     # Base VM OS configuration.
-    config.vm.provider "virtualbox"
     config.vm.box = "ubuntu/bionic64"
-    config.ssh.insert_key = false # Avoid 
+    config.ssh.insert_key = false # Avoid  vagrant to remove the common ssh private key
+    config.vm.provider :virtualbox do |v|
+      v.memory = 1300
+    end
 
     # elastic_node1
     config.vm.define "elastic_node1" do |elastic_node1|
@@ -16,9 +18,15 @@ Vagrant.configure("2") do |config|
     config.vm.define "elastic_node2" do |elastic_node2|
       elastic_node2.vm.hostname = "elastic-node2"
       elastic_node2.vm.network :private_network, ip: "192.168.2.3"
+    end
       
-      # Run Ansible provisioner once for all VMs at the end.
-      elastic_node2.vm.provision "ansible" do |ansible|
+    # kibana_node
+    config.vm.define "kibana_node" do |kibana_node|
+      kibana_node.vm.hostname = "kibana-node"
+      kibana_node.vm.network :private_network, ip: "192.168.2.4"
+      
+      # Run Ansible provisioner once for all VMs at the end i.e. for the last VM.
+      kibana_node.vm.provision "ansible" do |ansible|
         ansible.playbook = "ping.yml"
         ansible.inventory_path = "hosts.cfg"
         ansible.limit = "all"

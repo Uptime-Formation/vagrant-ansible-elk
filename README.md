@@ -1,10 +1,10 @@
 # TP : installer un cluster simple Elasticsearch et Kibana avec Ansible
 
+Correction dans la branche: `correction_elastic_install_vagrant`
 
-La première partie du TP se déroule avec une image virtualbox ova contenant ubuntu bionic server (non fournie dans le dépôt)
-
-#### Login des machines ubuntu bionic server:
-
-user: elk-admin
-password: el4stic
-
+pour utiliser ce dépôt sur la branche correction:
+- installer ansible, vagrant et virtualbox.
+- creer les VMs: `vagrant up`
+- lancer le playbook pour tester les VM avec Ansible: `vagrant provision` 
+- installer elastic: `ansible-playbook setup_elastic.yml`
+- installer elastic: `ansible-playbook setup_kibana.yml`
