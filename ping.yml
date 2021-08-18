@@ -1,9 +1,9 @@
 ---
-- hosts: elk_nodes
+- hosts: all
   gather_facts: False
   become: yes
 
   tasks:
-    - name: 'link python to enable ansible' 
-      raw: 'sudo ln -fs /usr/bin/python3 /usr/bin/python'
+    # - name: 'link python to enable ansible' 
+    #   raw: 'sudo ln -fs /usr/bin/python3 /usr/bin/python'
     - ping: 
