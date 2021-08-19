@@ -26,7 +26,7 @@
 
     - name: Add elasticsearch apt repo
       apt_repository:
-        repo: "deb https://artifacts.elastic.co/packages/6.x/apt stable main"
+        repo: "deb https://artifacts.elastic.co/packages/7.x/apt stable main"
         state: present
 
     - name: Install Kibana
