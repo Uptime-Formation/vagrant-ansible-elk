@@ -8,7 +8,7 @@ Vagrant.configure("2") do |config|
       v.memory = 1536
     end
 
-    # elastic_node1
+    # elastic-node1
     config.vm.define "elastic_node1" do |elastic_node1|
       elastic_node1.vm.hostname = "elastic-node1"
       elastic_node1.vm.network :private_network, ip: "192.168.2.2"
@@ -20,7 +20,7 @@ Vagrant.configure("2") do |config|
       elastic_node2.vm.network :private_network, ip: "192.168.2.3"
     end
       
-    # kibana_node
+    # kibana-node
     config.vm.define "kibana_node" do |kibana_node|
       kibana_node.vm.hostname = "kibana-node"
       kibana_node.vm.network :private_network, ip: "192.168.2.4"
