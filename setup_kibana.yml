@@ -57,6 +57,14 @@
         enabled: yes
         daemon_reload: yes #required before first run
 
+
+    - name: Make sure Kibana is running before proceeding.
+      wait_for:
+        host: "{{ ansible_host }}"
+        port: "{{ kibana_server_port }}"
+        timeout: 600
+    
+
   handlers:
     - name: restart kibana
       service:
