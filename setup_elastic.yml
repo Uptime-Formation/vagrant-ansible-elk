@@ -3,7 +3,7 @@
 
   vars:
     - elasticsearch_cluster_name: elk_formation
-    - elasticsearch_network_host: "0.0.0.0"
+    - elasticsearch_interface: "0.0.0.0"
     - elasticsearch_http_port: 9200
     - elk_node_ips:
       - 192.168.2.2
@@ -62,9 +62,9 @@
 
     - name: Make sure Elasticsearch is running before proceeding.
       wait_for:
-        host: "{{ elasticsearch_network_host }}"
+        host: "{{ ansible_host }}"
         port: "{{ elasticsearch_http_port }}"
-        timeout: 300
+        timeout: 600
     
 
   handlers:
