@@ -1,0 +1,5 @@
+output.elasticsearch:
+  hosts: ["{{ filebeat_elasticsearch_address }}"]
+
+filebeat.config.modules:
+    path: ${path.config}/modules.d/*.yml

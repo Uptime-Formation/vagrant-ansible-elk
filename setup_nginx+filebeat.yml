@@ -1,0 +1,57 @@
+- hosts: nginx-node
+  become: yes
+
+  vars:
+    - filebeat_elasticsearch_address: "192.168.2.2:9200"
+
+  tasks:
+    - name: Install apt requirements
+      apt:
+        name: 
+          - apt-transport-https
+          - gpg
+        update_cache: yes
+
+    - name: Install nginx
+      apt:
+        name: nginx
+
+    - name: Add elasticsearch repo GPG key
+      apt_key:
+        url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+        state: present
+
+    - name: Add elasticsearch apt repo
+      apt_repository:
+        repo: "deb https://artifacts.elastic.co/packages/7.x/apt stable main"
+        state: present
+
+    - name: Install Filebeat
+      apt:
+        name: filebeat
+        state: present
+
+    - name: Configure Filebeat.
+      template:
+        src: filebeat.yml.j2
+        dest: /etc/filebeat/filebeat.yml
+        owner: root
+        mode: 0740
+      notify: restart filebeat
+    
+    - name: Enable the Nginx module.
+      shell: filebeat modules enable nginx
+
+    - name: Start Filebeat.
+      systemd:
+        name: filebeat
+        state: started
+        enabled: yes
+        daemon_reload: yes #required before first run
+    
+
+  handlers:
+    - name: restart filebeat
+      service:
+        name: filebeat
+        state: restarted
