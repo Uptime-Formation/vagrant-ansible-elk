@@ -3,3 +3,6 @@ output.elasticsearch:
 
 filebeat.config.modules:
     path: ${path.config}/modules.d/*.yml
+
+setup.kibana:
+  host: "{{ filebeat_kibana_address }}"
