@@ -19,7 +19,13 @@ Vagrant.configure("2") do |config|
       elastic_node2.vm.hostname = "elastic-node2"
       elastic_node2.vm.network :private_network, ip: "192.168.2.3"
     end
-      
+
+    # elastic_node3
+    config.vm.define "elastic_node3" do |elastic_node3|
+      elastic_node3.vm.hostname = "elastic-node3"
+      elastic_node3.vm.network :private_network, ip: "192.168.2.5"
+    end
+    
     # kibana-node
     config.vm.define "kibana_node" do |kibana_node|
       kibana_node.vm.hostname = "kibana-node"
