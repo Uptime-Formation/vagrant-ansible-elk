@@ -4,7 +4,7 @@
   vars:
     - kibana_server_port: 5601
     - kibana_interface: "0.0.0.0"
-    - kibana_elasticsearch_url: "http://192.168.2.2:9200"
+
     - kibana_elasticsearch_username: ""
     - kibana_elasticsearch_password: ""
 

@@ -1,5 +1,11 @@
 output.elasticsearch:
-  hosts: ["{{ filebeat_elasticsearch_address }}"]
+  hosts: 
+  {% for node in groups['elastic_nodes'] %}
+  - {{ hostvars[node]['ansible_host'] }}:9200
+  {% endfor %}
 
 filebeat.config.modules:
     path: ${path.config}/modules.d/*.yml
+
+setup.kibana:
+  host: "{{ filebeat_kibana_address }}"

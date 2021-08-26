@@ -2,7 +2,7 @@
   become: yes
 
   vars:
-    - filebeat_elasticsearch_address: "192.168.2.2:9200"
+    - filebeat_kibana_address: "192.168.2.4:5601"
 
   tasks:
     - name: Install apt requirements
@@ -39,8 +39,13 @@
         mode: 0740
       notify: restart filebeat
     
+    - meta: flush_handlers
+
     - name: Enable the Nginx module.
       shell: filebeat modules enable nginx
+
+    - name: Enable the filebeat dashboards.
+      shell: filebeat setup --dashboards
 
     - name: Start Filebeat.
       systemd:
